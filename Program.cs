@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace EPQ_Testing
 {
@@ -6,76 +7,96 @@ namespace EPQ_Testing
     {
         static void Main(string[] args)
         {
-            for (int j = 1; j <= 30; j++)
-            {
-                var freq = new int[50];
-                var rng = new RandomNumberGenerator();
-                int numOfValuesToGenerate = 10000;
+            NumberGenerator number = new NumberGenerator(1000, 10000);
 
 
+            number.runAlgorithm();
 
-                int one = 0, two = 0, three = 0;
-
-
-                for (int i = 0; i < numOfValuesToGenerate; i++)
-                {
-                    var rnd = rng.Next(3);
-                    freq[rnd] += 1;
-
-                    if (rnd == 0)
-                    {
-                        one++;
-                    }
-                    else if (rnd == 1)
-                    {
-                        two++;
-                    }
-                    else if (rnd == 2)
-                    {
-                        three++;
-                    }
-                }
-
-                Console.WriteLine($"{j}) Each number frequency");
-
-                Console.WriteLine($"One: {one}");
-                Console.WriteLine($"Two: {two}");
-                Console.WriteLine($"Three: {three}");
-
-                Console.WriteLine();
-            }
 
             Console.ReadLine();
         }
     }
 
-    class RandomNumberGenerator
+    class NumberGenerator
     {
-        private const long m = 4294967296; // aka 2^32
-        private const long a = 1664525; //the multiplie
-        private const long c = 1013904223;  //the increment
-        private long _last;
+        private double m = 3;
+        private double tempNumber = 0;
+        int numberOfPasses = 0;
+        int numOfNumbers = 0;
+        int count = 0;
+        Stack stack = new Stack();
 
-        public RandomNumberGenerator()
+        public NumberGenerator(int p, int n)
         {
-            _last = DateTime.Now.Ticks % m; //gets the value from the nternal clock in the computer
+            this.numberOfPasses = p;
+            this.numOfNumbers = n;
         }
 
-        public RandomNumberGenerator(long seed)
+        public void runAlgorithm()
         {
-            _last = seed;
+            for (int i = 0; i < numberOfPasses; i++)
+            {
+                sendNumbers();
+                count++;
+            }
         }
 
-        public long Next()
+        public void sendNumbers()
         {
-            _last = ((a * _last) + c) % m; //eqaution
+            createNumbers();
 
-            return _last;
+            Stack numbers = new Stack();
+            numbers = returnStackofNumbers();
+
+            int one = 0;
+            int two = 0;
+            int three = 0;
+
+            foreach (double n in numbers)
+            {
+                if (n == 1)
+                {
+                    one++;
+                }
+
+                if (n == 2)
+                {
+                    two++;
+                }
+
+                if (n == 3)
+                {
+                    three++;
+                }
+            }
+
+            Console.WriteLine($"{count + 1}) Each number frequency: ");
+            Console.WriteLine($"One: {one}");
+            Console.WriteLine($"Two: {two}");
+            Console.WriteLine($"Three: {three}");
+            Console.WriteLine("\t");
+
+            stack.Clear();
+
+        }
+        public void createNumbers()
+        {
+            for (int i = 0; i < numOfNumbers; i++)
+            {
+                tempNumber = DateTime.Now.Ticks;
+
+                if (tempNumber % m <= 3)
+                {
+                    tempNumber = tempNumber % m;
+                    tempNumber++;
+                    stack.Push(tempNumber);
+                }
+            }
         }
 
-        public long Next(long maxValue)
+        public Stack returnStackofNumbers()
         {
-            return Next() % maxValue;
+            return stack;   
         }
     }
 }
