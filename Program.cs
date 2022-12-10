@@ -9,7 +9,6 @@ namespace EPQ_Testing
         {
             NumberGenerator number = new NumberGenerator(1000, 10000);
 
-
             number.runAlgorithm();
 
 
