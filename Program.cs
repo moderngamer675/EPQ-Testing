@@ -7,7 +7,7 @@ namespace EPQ_Testing
     {
         static void Main(string[] args)
         {
-            NumberGenerator number = new NumberGenerator(30, 10000);  //(number of passess to make, # of numbers to generate in each pass)
+            NumberGenerator number = new NumberGenerator(100, 10000);  //(number of passess to make, # of numbers to generate in each pass)
 
             number.runAlgorithm();
 
@@ -19,7 +19,7 @@ namespace EPQ_Testing
     class NumberGenerator
     {
         private double m = 3;
-        private double seed  = 0;
+        private double seed = 0;
         private int numberOfPasses = 0;
         private int numOfNumbers = 0;
         private int count = 0;
@@ -40,7 +40,6 @@ namespace EPQ_Testing
                 count++;
             }
         }
-
         public void sendNumbers()
         {
             createNumbers();
@@ -54,17 +53,18 @@ namespace EPQ_Testing
 
             foreach (double n in numbers)
             {
-                if (n == 1)
+
+                if (n == 0)
                 {
                     one++;
                 }
 
-                if (n == 2)
+                if (n == 1)
                 {
                     two++;
                 }
 
-                if (n == 3)
+                if (n == 2)
                 {
                     three++;
                 }
@@ -86,14 +86,11 @@ namespace EPQ_Testing
             double num1 = 0;
             double num2 = 0;
 
-            Stack stack = new Stack();
-            Random rnd = new Random();
-
             do
             {
-                seed = DateTime.Now.Ticks % 1000;
+                seed = DateTime.Now.Ticks % 100000;
             }
-            while (seed < 213 && seed / 2 != 0);
+            while (seed < 21300 && seed / 2 != 0);
 
             stack.Push(seed);
             num1 = Math.Pow(seed, 2);
@@ -102,48 +99,23 @@ namespace EPQ_Testing
             {
                 number = Convert.ToString(num1);
 
-                if (number.Length == 6)
-                {
-                    double chance = rnd.NextDouble();
+                number = number.Substring(0, 8);
 
-                    if (chance < 0.5)
-                    {
-                        number = number.Substring(0, 4);
-                        number = number.Substring(1, 3);
-                    }
-                    else
-                    {
-                        number = number.Substring(1, 4);
-                        number = number.Substring(1, 3);
-                    }
+                num2 = Convert.ToDouble(number);
 
-                    num2 = Convert.ToDouble(number);
-                    stack.Push(num2);
+                num1 = Math.Pow(num2, 2);
 
-                    num1 = Math.Pow(num2, 2);
-                }
+                num2 = num2 % 3;
 
-                else if (number.Length == 5)
-                {
-                    number = number.Substring(0, 4);
-                    number = number.Substring(1, 3);
-
-                    num2 = Convert.ToDouble(number);
-
-                    stack.Push(num2);
-                    num1 = Math.Pow(num2, 2);
-                }
-            }
-
-            for (int i = 0; i < stack.Count; i++)
-            {
-                Console.WriteLine(stack.Pop());
+                stack.Push(num2);
             }
         }
-
         public Stack returnStackofNumbers()
         {
-            return stack;   
+            return stack;
         }
+
     }
 }
+
+
