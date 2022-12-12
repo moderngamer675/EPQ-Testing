@@ -18,7 +18,7 @@ namespace EPQ_Testing
 
     class NumberGenerator
     {
-        private double m = 3;
+        private double m = 209;
         private double seed = 0;
         private int numberOfPasses = 0;
         private int numOfNumbers = 0;
@@ -53,18 +53,19 @@ namespace EPQ_Testing
 
             foreach (double n in numbers)
             {
+                double test = n % 3;
 
-                if (n == 0)
+                if (test == 0)
                 {
                     one++;
                 }
 
-                if (n == 1)
+                if (test == 1)
                 {
                     two++;
                 }
 
-                if (n == 2)
+                if (test == 2)
                 {
                     three++;
                 }
@@ -81,33 +82,22 @@ namespace EPQ_Testing
         }
         public void createNumbers()
         {
-            string number;
-            double seed = 0;
-            double num1 = 0;
-            double num2 = 0;
+            double number;
 
             do
             {
-                seed = DateTime.Now.Ticks % 100000;
+                seed = DateTime.Now.Ticks % 1000;
             }
-            while (seed < 21300 && seed / 2 != 0);
+            while (seed / 2 != 0 && seed < 102);
 
             stack.Push(seed);
-            num1 = Math.Pow(seed, 2);
+            number = Convert.ToDouble(Math.Pow(seed, 2)) % m;
+            stack.Push(number);
 
-            for (int i = 0; i < numOfNumbers; i++)
+            for (int i = 0; i < numOfNumbers - 2; i++)
             {
-                number = Convert.ToString(num1);
-
-                number = number.Substring(0, 8);
-
-                num2 = Convert.ToDouble(number);
-
-                num1 = Math.Pow(num2, 2);
-
-                num2 = num2 % 3;
-
-                stack.Push(num2);
+                number = Math.Pow(number, 2) % m;
+                stack.Push(number);
             }
         }
         public Stack returnStackofNumbers()
