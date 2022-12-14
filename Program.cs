@@ -7,10 +7,9 @@ namespace EPQ_Testing
     {
         static void Main(string[] args)
         {
-            NumberGenerator number = new NumberGenerator(100, 10000);  //(number of passess to make, # of numbers to generate in each pass)
+            NumberGenerator number = new NumberGenerator(1000, 10000);  //(number of passess to make, # of numbers to generate in each pass)
 
             number.runAlgorithm();
-
 
             Console.ReadLine();
         }
@@ -18,8 +17,6 @@ namespace EPQ_Testing
 
     class NumberGenerator
     {
-        private double m = 209;
-        private double seed = 0;
         private int numberOfPasses = 0;
         private int numOfNumbers = 0;
         private int count = 0;
@@ -40,6 +37,7 @@ namespace EPQ_Testing
                 count++;
             }
         }
+
         public void sendNumbers()
         {
             createNumbers();
@@ -51,9 +49,9 @@ namespace EPQ_Testing
             int two = 0;
             int three = 0;
 
-            foreach (double n in numbers)
+            foreach (int n in numbers)
             {
-                double test = n % 3;
+                int test = n % 3;
 
                 if (test == 0)
                 {
@@ -82,24 +80,33 @@ namespace EPQ_Testing
         }
         public void createNumbers()
         {
-            double number;
+            Random rnd = new Random();
+            Stack st = new Stack();
+            string answer = "";
+            int standardAnswer;
 
-            do
+            for (int i = 0; i < numOfNumbers; i++)
             {
-                seed = DateTime.Now.Ticks % 1000;
+                answer = "";
+
+                for (int k = 0; k < 15; k++)
+                {
+                    int num = rnd.Next(0, 2);
+                    answer = answer + (int)num;
+                }
+
+                standardAnswer = (int)Convert.ToInt32(answer, 2);
+
+                st.Push(standardAnswer);
             }
-            while (seed / 2 != 0 && seed < 102);
 
-            stack.Push(seed);
-            number = Convert.ToDouble(Math.Pow(seed, 2)) % m;
-            stack.Push(number);
-
-            for (int i = 0; i < numOfNumbers - 2; i++)
+            for (int i = 0; i < numOfNumbers; i++)
             {
-                number = Math.Pow(number, 2) % m;
-                stack.Push(number);
+                stack.Push(st.Pop());
             }
+            
         }
+
         public Stack returnStackofNumbers()
         {
             return stack;
